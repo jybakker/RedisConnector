@@ -115,6 +115,48 @@ public class RedisConnector {
 		}
 	}
 
+	// https://redis.io/commands/exists
+		public boolean exists(String key) {
+			try {
+				redis = pool.getResource();
+				setDatabase();
+				_logNode.debug("exists " + key);		
+				return redis.exists(key);
+			} catch (JedisConnectionException e) {
+				if (redis != null) {
+					redis.close();
+				}
+				throw e;
+
+			} finally {
+				if (redis != null) {
+					redis.close();
+				}
+			}
+		}
+
+	// https://redis.io/commands/expireAt
+	public long expireAt(String key, Long timestamp) {
+		try {
+			redis = pool.getResource();
+			setDatabase();
+			_logNode.debug("expire " + key + " expire timestamp " + timestamp);		
+			return redis.expireAt(key, timestamp);
+		} catch (JedisConnectionException e) {
+			if (redis != null) {
+				redis.close();
+			}
+			throw e;
+
+		} finally {
+			if (redis != null) {
+				redis.close();
+			}
+		}
+	}
+
+	
+
 	// https://redis.io/commands/expire
 	public long expire(String Key, int Seconds) {
 		try {
